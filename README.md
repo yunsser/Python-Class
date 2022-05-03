@@ -3,3 +3,9 @@
 2. Jupyter notebook
 3. 주석문의 종류
 
+#### Chap 02 (20220504)
+1. Random
+2. List comprehensions
+3. list, set, dictionary
+
+

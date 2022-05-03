@@ -353,17 +353,21 @@ nums.reverse()
 nums
 
 
-# In[34]:
+# In[2]:
 
 
 import random
-
-rd_num = random.randint(0,10)
-
 # 임의의 종수 한개를 구한다(5~10)
 # 위에서 구해진 수의 갯수만큼의 임의의 정수를 구함 # 7이라면 7개의 임의의 정수를 구한다
 # 구해진 모든 정수를 화면에 표시해보세요
 # 표시 예)
 # 1. 6
 # 2. 2
+
+rd_num = random.randint(5,10)
+list1 = []
+for i in range(0, rd_num):
+    rd_num1 = random.randint(0,10)
+    list1.append(rd_num1)
+    print(i+1, list1[i])    
 

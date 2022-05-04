@@ -5,29 +5,29 @@
 # 1. Collecion(정보처리)
 # 2. Arguments
 
-# In[1]:
+# In[3]:
 
 
 nums = [1,2,3,4,4,5]
 nums
 
 
-# In[2]:
+# In[4]:
 
 
 set(nums)
 
 
-# In[3]:
+# In[5]:
 
 
 len(nums),len(set(nums))
 
 
-# In[4]:
+# In[6]:
 
 
-if len (num) != len(set(nums)):
+if len(nums)!=len(set(nums)):
     print('데이터 중복 발견')
 else:
     print('데이터 중복 없음')

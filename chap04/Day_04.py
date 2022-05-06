@@ -86,7 +86,7 @@ def delete_emp(num):
     return deleted
 
 
-# In[13]:
+# In[10]:
 
 
 while True:
@@ -107,7 +107,7 @@ while True:
         
     elif menu.upper()=='F':
         name = input("검색할 사원이름: ")
-        if find_emp_name(name) == None:
+        if not find_emp_name(name):
             print('입력된 이름으로 검색 실패')
                     
     elif menu.upper()=='U':

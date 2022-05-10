@@ -20,3 +20,8 @@
 #### Chap 05 (20220509)
  - 파일다루기
  - 객체 직렬화(Serialization)
+
+#### Chap 06 (20220510)
+ - 객체 직렬화(Object Serialization)
+ - 역직렬화(De-Serialization)
+ - Thread, Runnable, run()

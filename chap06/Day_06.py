@@ -31,7 +31,7 @@ emp = Emp(11, 'Smith', '010-2394-5410')
 
 
 # 객체 직렬화 (Serialization)
-fw = open('enpObj.pickle', 'wb')
+fw = open('empObj.pickle', 'wb')
 pickle.dump(emp,fw)
 fw.close()
 print('객체 직렬화 성공')

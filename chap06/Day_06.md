@@ -1,83 +1,397 @@
-# Day_06
+# 오늘의 주제
+* pickle모듈을 사용한 직렬화/역직렬화 응용 CRUD
 
-### pickle모듈을 사용한 직렬화/역직렬화 응용 CRUD
+### Serialization_Ex
 
-직렬화/역직렬화(Serialization/Deserialization)
 
-객체(인스턴스)
+```python
+from emp import Emp
+```
 
-- 메모리에 생성
 
-채팅
+```python
+import pickle
+```
 
-- 메세지(수신자, 송신자, 그룹, 텍스트)
 
-직렬화 : 객체를 파일에 저장가능, 객체를 네트워크 전송
+```python
+emp = Emp(11, 'Smith', '010-2394-5410')
+```
 
-객체 직렬화 → 전송, 수신, 역직렬화(원래 객체로 변환)
+### 객체 직렬화(Object Serialization)
+* 메모리상에 저장된 객체를 파일이나 네트워크로 전송할 때 필요함
 
-- mode
-    
-    **파일 모드 종류**
-    
-    **r** - 읽기모드 (디폴트)
-    
-    **w** - 쓰기모드, 파일이 있으면 모든 내용을 삭제
-    
-    **x** - 쓰기모드, 파일이 있으면 오류 발생
-    
-    **a** - 쓰기모드, 파일이 있으면 뒤에 내용을 추가
-    
-    **+** - 읽기쓰기모드
-    
-    **t** - 텍스트 모드, 텍스트 문자 기록에 사용 (디폴트)
-    
-    **b** - 바이너리 모드, 바이트단위 데이터 기록에 사용
-    
-    **파일 모드 사용예**
-    
-    f = open('file.txt', '**rt**')
-    
-    기본값으로 텍스트 읽기모드 (rt는 생략 가능)
-    
-    f = open('file.txt', '**wb**')
-    
-    바이너리 쓰기모드
-    
-    f = open('file.txt', '**r+t**')
-    
-    텍스트 읽기쓰기모드, **맨 앞에서부터 내용을 덮어쓴다.**
-    
-    (파일이 없으면 오류 발생)
-    
-    f = open('file.txt', '**w+t**')
-    
-    텍스트 읽기쓰기모드, **파일 내용을 다 지우고 다시 쓴다.**
-    
-    f = open('file.txt', '**a+t**')
-    
-    텍스트 읽기쓰기모드, **파일의 모든 내용을 남겨두고 맨 뒤에서부터 쓴다.**
-    
-    **+**가 포함된 파일모드는 모두 **읽기쓰기모드**이지만 **기존 파일 내용을 처리하는 방식에 차이**가 있다.
-    
 
-lambda 정렬, 숫자정렬
+```python
+# 객체 직렬화 (Serialization)
+fw = open('enpObj.pickle', 'wb')
+pickle.dump(emp,fw)
+fw.close()
+print('객체 직렬화 성공')
+```
 
-쓰레드, 네트웍
+### 역직렬화(De-Serialization)
 
-pickle.dump(obj, fout)
 
-pickle.load(fin)
+```python
+fr = open('empObj.pickle', 'rb')
+emp2 = pickle.load(fr)
+fr.close()
+print(emp2)
+print(emp2.name)
+```
 
-- 예시
+
+```python
+emp == emp2 # emp.__eq__(emp2)
+```
+
+
+```python
+emplist = [Emp(11), Emp(12), Emp(13)]
+```
+
+
+```python
+fw = open('emplist.pickle', 'wb')
+pickle.dump(emplist, fw)
+fw.close()
+
+print('리스트 직렬화 완료')
+```
+
+
+```python
+fr = open('emplist.pickle', 'rb')
+emps = pickle.load(fr)
+fr.close()
+
+print(emps[0])
+print('리스트 역직렬화 성공')
+```
+
+
+```python
+# 객체 > 텍스트 파일, 텍스트 > 객체 매핑
+# 객체 > 객체, 객체 > 객체
+```
+
+
+```python
+# 프로그램이 시작되면 메뉴 6개가 표시된다
+# 목록(s), 추가(a), 검색(f), 수정(u), 삭제(d), 종료(x)
+# 추가(a)하고 목록보기가 되도록 기능을 작성해보세요
+```
+
+
+```python
+import pickle
+from emp import Emp
+```
+
+
+```python
+emplist = []
+```
+
+
+```python
+def save_emplist():
+    saved = False
+    try:
+        with open('crud_list.pickle','wb') as fout:
+            pickle.dump(emplist, fout)
+            saved = True
+    except:
+        pass
+    return saved
+```
+
+
+```python
+def add_emp(emp):
+    emplist.append(emp)
+    return save_emplist()
+```
+
+
+```python
+def show_list():
+    with open('crud_list.pickle','rb') as fin:
+        elist = pickle.load(fin)
+        # elist.sort(key=lambda e:e.num)
+        elist.sort(key=lambda e:int(e.num))
+        for e in elist:
+            print(e)
+```
+
+
+```python
+def find_emp(emp):
+    found = None
+    with open('crud_list.pickle','rb') as fin:
+        elist = pickle.load(fin)
+        if emp in elist:
+            found = elist[elist.index(emp)]
+    return found
+```
+
+
+```python
+def update_emp(emp):
+    updated = None
+    global emplist # 현재 함수 외부에 선언된 변수(global)
+    with open('crud_list.pickle', 'rb') as fin:
+        emplist = pickle.load(fin)
+        if emp in emplist:
+            emplist[emplist.index(emp)].phone = emp.phone
+            updated = save_emplist()
+    return updated
+```
+
+
+```python
+def delete_emp(emp):
+    global emplist
+    deleted = False
+    with open('crud_list.pickle', 'rb') as fin:
+        emplist = pickle.load(fin)
+        if emp in emplist:
+            emplist.remove(emp)
+            deleted = save_emplist()
+    return deleted
+```
+
+
+```python
+def is_duplicate(emp):
+    with open('crud_list.pickle','rb') as fin:
+        emplist = pickle.load(fin)
+        if emp in emplist:
+            return True
+    return False
+```
+
+
+```python
+while True:
+    menu = input('목록(s), 추가(a), 검색(f), 수정(u), 삭제(d), 종료(x)')
     
-    pickle.dump(객체, 파일) :  저장
+    if menu.upper()=='A':
+        num, name, phone = input('사원번호 이름 전화번호').strip().split()
+        emp = Emp(num, name, phone)
+        if is_duplicate(emp):
+            print('번호중복, 추가실패!')
+            continue
+        if add_emp(emp):
+            print('사원정보 추가 성공')
+        else:
+            print('사원정보 추가 실패')
+    elif menu.upper()=="S":
+        show_list()
+    elif menu.upper()=="F":
+        sNum = input('검색할 사원번호: ').strip()
+        found = find_emp(Emp(sNum))
+        if found:
+            print(found)
+        else:
+            print('검색 실패')
+    elif menu.upper()=="U":
+        num,phone = input('변경할 사원번호 전화번호').strip().split()
+        if update_emp(Emp(num, phone=phone)):
+            print('수정 성공')
+        else:
+            print('수정 성공')
+    elif menu.upper()=="D":
+        sNum = input('삭제할 사원번호').strip()
+        if delete_emp(Emp(sNum)):
+            print('삭제 성공')
+        else:
+            print('삭제 실패')
+    elif menu.upper()=="X":
+        break;
+    else:
+        print('메뉴입력 오류')
+
+print('프로그램 종료....')
+```
+
+
+```python
+with open('crud_list.pickle','rb') as fin:
+        elist = pickle.load(fin)
+elist
+for e in elist:
+    print(e)
+```
+
+
+```python
+elist
+byte_arr = pickle.dumps(elist)
+print(byte_arr)
+```
+
+
+```python
+elist2 = pickle.loads(byte_arr)
+for e in elist2:
+    print(e)
+```
+
+
+```python
+# elist.sort() # 객체를 정렬해라는 오류남 # 객체의 어떤 값을 지정해서 정렬하라고 해야 오류안남
+elist.sort(key=lambda e:e.num) # 람다식
+for e in elist:
+    print(e)
+```
+
+
+```python
+nums = [3,5,1,4,2]
+sorted(nums)
+nums.sort()
+nums
+```
+
+
+```python
+outer_num = 100
+```
+
+
+```python
+def value_use():
+    print(outer_num + 10)
+```
+
+
+```python
+value_use()
+```
+
+
+```python
+def value_change():
+    global outer_num
+    outer_num = 10 # 지역변수 > 전역변수, global로 선언
+    print(outer_num)  # 10
+```
+
+
+```python
+value_change()
+```
+
+
+```python
+outer_num
+```
+
+
+```python
+def value_use2():
+    num = outer_num + 100
+    print(num)
+```
+
+
+```python
+value_use2()
+```
+
+
+```python
+# dumps(), loads()
+emplist
+```
+
+### Thread_Ex
+
+
+```python
+# Thread, Runnable, run()
+# Process : 현재 실행중인 프로그램
+# Process 안에서 동시에 실행 가능한 소규모 Process
+```
+
+
+```python
+# 함수, 메소드, run()
+```
+
+
+```python
+import threading
+import time
+import datetime
+```
+
+
+```python
+def t1(name):
+    while True:
+        print(name, datetime.datetime.now())
+        time.sleep(1)
+```
+
+
+```python
+# t1('Date Thread')
+```
+
+
+```python
+def t2(name):
+    i = 0
+    while True:
+        i += 1
+        print(name, i)
+        time.sleep(1)
+```
+
+
+```python
+# t2('Num Thread')
+```
+
+
+```python
+th1 = threading.Thread(target=t1, args=('Date Thread',))
+th1.daemon = True
+th1.start()
+
+th2 = threading.Thread(target=t2, args=('Num Thread',))
+th2.daemon = True
+th2.start()
+```
+
+
+```python
+# 객체의 멤버 메소드를 쓰레드의 타켓으로 설정하는 예
+# threading. Thread(target=obj.method), args=('Date Thread',))
+```
+
+
+```python
+import threading
+import datetime
+import time
+
+# 가상의 CPU역활을 하는 클래스 정의
+class MyGame(threading.Thread): # Thread 클래스 상속
+    def __init__(self, name):
+        threading.Thread.__init__(self)
+        print(name, 'instanciated')
+        self.daemon = True
     
-    pickle.load(파일) : 로딩
+    def run(self):
+        while True:
+            print(datetime.datetime.now())
+            time.sleep(1) # 1초 쉼
     
-
-pickle.dumps()
-
-pickle.loads()
-
-jupyter notebook —> python
+my_thread = MyGame('game thread')
+# my_thread.daemon = True
+my_thread.start()
+```

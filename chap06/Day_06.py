@@ -42,7 +42,7 @@ print('객체 직렬화 성공')
 # In[ ]:
 
 
-fr = open('enpObj.pickle', 'rb')
+fr = open('empObj.pickle', 'rb')
 emp2 = pickle.load(fr)
 fr.close()
 print(emp2)

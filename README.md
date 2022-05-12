@@ -25,3 +25,14 @@
  - 객체 직렬화(Object Serialization)
  - 역직렬화(De-Serialization)
  - Thread, Runnable, run()
+
+#### Chap 07 (20220511)
+ - CountDownThread
+ - Server_Socket
+ - Client_Socket
+
+#### Chap 08 (20220512)
+ - Server_Socket (고유번호 부여, 파일보내기)
+ - Client_Socket (귓속말, 파일보내기)
+ - MySQL 설정
+ - MySQL 사용법
